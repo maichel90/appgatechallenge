@@ -7,6 +7,7 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,7 @@ import com.larodriguezm.appgate.dto.DocumentDTO;
 import com.larodriguezm.appgate.exception.FileStorageException;
 import com.larodriguezm.appgate.mapper.IDocumentMapper;
 import com.larodriguezm.appgate.model.Document;
+import com.larodriguezm.appgate.model.ProcessStatus;
 import com.larodriguezm.appgate.repository.DocumentRepository;
 
 @Service
@@ -29,6 +31,9 @@ public class DocumentService {
 	
 	@Autowired
 	private DocumentRepository documentRepository;
+	
+	@Autowired
+	private ProcessDocument processDocument;
 
 	public DocumentDTO uploadDocument(MultipartFile file) {
 		String originalFileName = StringUtils.cleanPath(file.getOriginalFilename());
@@ -54,18 +59,22 @@ public class DocumentService {
 		Document document = new Document();
 		document.setDocumentName(originalFileName);
 		document.setCreationDate(new Date());
-		document.setDocumentFormat(file.getContentType());;
+		document.setDocumentFormat(file.getContentType());
+		document.setProcessStatus(ProcessStatus.LOADED);
 		return documentRepository.save(document);
 	}
 
 	public List<DocumentDTO> getDocuments() {
-		// TODO Auto-generated method stub
-		return null;
+		return IDocumentMapper.INSTANCE.entityToDTOList(documentRepository.findAll());
 	}
 
 	public DocumentDTO launchProcessDocument(Integer documentId) {
-		// TODO Auto-generated method stub
-		return null;
+		Document document = null;
+		Optional<Document> optional = documentRepository.findByDocumentId(documentId);
+		if(optional.isPresent() && optional.get().getProcessStatus()==ProcessStatus.LOADED) {
+			document = optional.get();
+			processDocument.launchProcessDocument(document);
+		}
+		return IDocumentMapper.INSTANCE.entityToDTO(document);
 	}
-
 }

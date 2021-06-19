@@ -1,15 +1,12 @@
 package com.larodriguezm.appgate.model;
 
-import java.util.Date;
-
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -22,20 +19,16 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
-public class Document {
-
+public class Region {
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer documentId;
-		
-	private String documentName;
-		
-    private String documentFormat;
-        
-	@Temporal(TemporalType.TIMESTAMP)
-	private Date creationDate;
+	private Integer regionId;
 	
-	@Enumerated(EnumType.STRING)
-	private ProcessStatus processStatus;
+	private String regionName;
 	
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "countryId", nullable = false)
+	private Country country;
+
 }
