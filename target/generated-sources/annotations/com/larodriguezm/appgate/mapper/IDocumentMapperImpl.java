@@ -8,7 +8,7 @@ import javax.annotation.processing.Generated;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2021-06-19T11:43:44-0500",
+    date = "2021-06-19T12:37:25-0500",
     comments = "version: 1.4.2.Final, compiler: javac, environment: Java 11.0.9 (Red Hat, Inc.)"
 )
 public class IDocumentMapperImpl implements IDocumentMapper {
@@ -22,10 +22,8 @@ public class IDocumentMapperImpl implements IDocumentMapper {
         DocumentDTO documentDTO = new DocumentDTO();
 
         documentDTO.setDocumentId( entity.getDocumentId() );
-        documentDTO.setCustomerId( entity.getCustomerId() );
         documentDTO.setDocumentName( entity.getDocumentName() );
         documentDTO.setDocumentFormat( entity.getDocumentFormat() );
-        documentDTO.setDocumentPrivate( entity.getDocumentPrivate() );
         documentDTO.setCreationDate( entity.getCreationDate() );
 
         return documentDTO;
@@ -40,10 +38,8 @@ public class IDocumentMapperImpl implements IDocumentMapper {
         Document document = new Document();
 
         document.setDocumentId( dto.getDocumentId() );
-        document.setCustomerId( dto.getCustomerId() );
         document.setDocumentName( dto.getDocumentName() );
         document.setDocumentFormat( dto.getDocumentFormat() );
-        document.setDocumentPrivate( dto.getDocumentPrivate() );
         document.setCreationDate( dto.getCreationDate() );
 
         return document;

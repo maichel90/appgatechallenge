@@ -36,7 +36,7 @@ public class DocumentController {
     }
 	
 	@PostMapping("/{documentId}")
-    public ResponseEntity<Object> launchProcessDocument(@PathVariable String documentId) {
+    public ResponseEntity<Object> launchProcessDocument(@PathVariable Integer documentId) {
 		DocumentDTO document = documentService.launchProcessDocument(documentId);
     	return new ResponseEntity<>(document,HttpStatus.OK);
     }

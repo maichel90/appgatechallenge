@@ -5,9 +5,11 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -17,19 +19,23 @@ import com.larodriguezm.appgate.dto.DocumentDTO;
 import com.larodriguezm.appgate.exception.FileStorageException;
 import com.larodriguezm.appgate.mapper.IDocumentMapper;
 import com.larodriguezm.appgate.model.Document;
+import com.larodriguezm.appgate.repository.DocumentRepository;
 
 @Service
 public class DocumentService {
 	
 	@Value("${file.upload-dir}")
 	private String uploadDir;
+	
+	@Autowired
+	private DocumentRepository documentRepository;
 
 	public DocumentDTO uploadDocument(MultipartFile file) {
 		String originalFileName = StringUtils.cleanPath(file.getOriginalFilename());
 		String[] split = originalFileName.split("\\.");
 		String finalFileName = UUID.randomUUID().toString()+"."+split[split.length-1];
 		saveDocumentFileSystem(finalFileName, file);
-		Document document =  null; //saveDocument(finalFileName, file);
+		Document document =  saveDocument(finalFileName, file);
 		return IDocumentMapper.INSTANCE.entityToDTO(document);
 	}
 	
@@ -43,13 +49,21 @@ public class DocumentService {
 			throw new FileStorageException("No se puede guardar el archivo " + originalFileName + ". Intente nuevamente!", e);
 		}
 	}
+	
+	private Document saveDocument(String originalFileName, MultipartFile file) {
+		Document document = new Document();
+		document.setDocumentName(originalFileName);
+		document.setCreationDate(new Date());
+		document.setDocumentFormat(file.getContentType());;
+		return documentRepository.save(document);
+	}
 
 	public List<DocumentDTO> getDocuments() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public DocumentDTO launchProcessDocument(String documentId) {
+	public DocumentDTO launchProcessDocument(Integer documentId) {
 		// TODO Auto-generated method stub
 		return null;
 	}

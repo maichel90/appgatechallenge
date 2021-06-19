@@ -25,15 +25,11 @@ public class Document {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer documentId;
-	
-	private String customerId;
-	
+		
 	private String documentName;
 		
     private String documentFormat;
-    
-    private Boolean documentPrivate;
-    
+        
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date creationDate;
 	

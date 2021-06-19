@@ -1,3 +1,4 @@
+com/larodriguezm/appgate/repository/DocumentRepository.class
 com/larodriguezm/appgate/controller/DocumentController.class
 com/larodriguezm/appgate/mapper/IDocumentMapper.class
 com/larodriguezm/appgate/service/DocumentService.class

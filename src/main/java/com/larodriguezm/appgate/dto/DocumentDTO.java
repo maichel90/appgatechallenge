@@ -16,13 +16,9 @@ public class DocumentDTO {
 
 	private Integer documentId;
 
-	private String customerId;
-
 	private String documentName;
 
 	private String documentFormat;
-
-	private Boolean documentPrivate;
 
 	private Date creationDate;
 
