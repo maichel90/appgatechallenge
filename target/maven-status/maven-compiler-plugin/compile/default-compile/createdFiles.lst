@@ -1,0 +1,8 @@
+com/larodriguezm/appgate/controller/DocumentController.class
+com/larodriguezm/appgate/mapper/IDocumentMapper.class
+com/larodriguezm/appgate/service/DocumentService.class
+com/larodriguezm/appgate/exception/FileStorageException.class
+com/larodriguezm/appgate/mapper/IDocumentMapperImpl.class
+com/larodriguezm/appgate/AppgateChallengeApplication.class
+com/larodriguezm/appgate/dto/DocumentDTO.class
+com/larodriguezm/appgate/model/Document.class
