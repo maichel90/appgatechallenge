@@ -1,0 +1,32 @@
+version: '3'
+services:
+  db:
+    image: mysql:5.7
+    container_name: appgate_challenge_db
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: Root123&*
+      MYSQL_DATABASE: Appgate
+      MYSQL_USER: appgate
+      MYSQL_PASSWORD: Appgate123&*
+    # Uncomment this if you want to persist the data.
+    # volumes:
+    #   - "./pgdata:/var/lib/postgresql/data"
+  appgatechallenge:
+    image: lamaichel/appgatechallenge
+    container_name: appgate_challenge
+    ports:
+      - 8080:8080
+    links:
+      - db:db
+    environment:
+      MYSQL_DATABASE: Appgate
+      MYSQL_USER: appgate
+      MYSQL_PASSWORD: Appgate123&*
+      MYSQL_URL: db:3306
+    depends_on:
+      - db
+    volumes:
+      - "/tmp/uploads/appgate/:/tmp/uploads/appgate/"
+  

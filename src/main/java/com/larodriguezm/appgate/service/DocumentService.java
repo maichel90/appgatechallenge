@@ -63,7 +63,7 @@ public class DocumentService {
 	private Integer splitDocumentFileSystem(String originalFileName, String folderUUID) {
 		String filePath = uploadDir+folderUUID+"/";
 		ProcessBuilder processBuilder = new ProcessBuilder();
-		processBuilder.command("bash", "-c", "cd "+filePath+" && split -d -C 3M "+originalFileName+" segment && ls segment* | wc -l");
+		processBuilder.command("sh", "-c", "cd "+filePath+" && split -d -C 3M "+originalFileName+" segment && ls segment* | wc -l");
 		try {
 			Process process = processBuilder.start();
 	        StringBuilder output = new StringBuilder();
