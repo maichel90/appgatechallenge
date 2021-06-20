@@ -17,7 +17,7 @@ spring:
         password: GV4r+HVNBHUxsBTc
 
   jpa:
-      show-sql: true
+      show-sql: false
       hibernate:
           ddl-auto: update
           naming-strategy: org.hibernate.cfg.ImprovedNamingStrategy

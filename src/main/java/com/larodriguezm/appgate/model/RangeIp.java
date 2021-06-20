@@ -4,6 +4,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -18,13 +20,18 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Builder
 @Entity
-public class Country {
-
+public class RangeIp {
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer countryId;
+	private Integer rangeId;
 	
-	private String countryCode;
+	private String ipfrom;
 	
-	private String countryName;
+	private String ipto;
+	
+	@ManyToOne
+	@JoinColumn(name = "cityId", nullable = false)
+	private City city;
+
 }

@@ -1,10 +1,13 @@
 package com.larodriguezm.appgate.service;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.text.DecimalFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -38,15 +41,17 @@ public class DocumentService {
 	public DocumentDTO uploadDocument(MultipartFile file) {
 		String originalFileName = StringUtils.cleanPath(file.getOriginalFilename());
 		String[] split = originalFileName.split("\\.");
-		String finalFileName = UUID.randomUUID().toString()+"."+split[split.length-1];
-		saveDocumentFileSystem(finalFileName, file);
-		Document document =  saveDocument(finalFileName, file);
+		String uuid = UUID.randomUUID().toString();
+		String finalFileName = uuid+"."+split[split.length-1];
+		saveDocumentFileSystem(finalFileName,uuid, file);
+		Integer amountSplit = splitDocumentFileSystem(finalFileName,uuid);
+		Document document =  saveDocument(finalFileName,uuid,amountSplit, file);
 		return IDocumentMapper.INSTANCE.entityToDTO(document);
 	}
 	
-	private void saveDocumentFileSystem(String originalFileName, MultipartFile file) {
+	private void saveDocumentFileSystem(String originalFileName, String folderUUID, MultipartFile file) {
 		try {
-			Path fileStorageLocation = Paths.get(uploadDir).toAbsolutePath().normalize();
+			Path fileStorageLocation = Paths.get(uploadDir+folderUUID+"/").toAbsolutePath().normalize();
 			Path targetLocation = fileStorageLocation.resolve(originalFileName);
 			Files.createDirectories(fileStorageLocation);
 			Files.copy(file.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
@@ -55,10 +60,34 @@ public class DocumentService {
 		}
 	}
 	
-	private Document saveDocument(String originalFileName, MultipartFile file) {
+	private Integer splitDocumentFileSystem(String originalFileName, String folderUUID) {
+		String filePath = uploadDir+folderUUID+"/";
+		ProcessBuilder processBuilder = new ProcessBuilder();
+		processBuilder.command("bash", "-c", "cd "+filePath+" && split -d -C 3M "+originalFileName+" segment && ls segment* | wc -l");
+		try {
+			Process process = processBuilder.start();
+	        StringBuilder output = new StringBuilder();
+	        BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+	        String line;
+	        while ((line = reader.readLine()) != null) {
+	            output.append(line);
+	        }
+	        int exitVal = process.waitFor();
+	        if (exitVal == 0) {
+	        	return Integer.parseInt(output.toString());
+	        }
+		}catch (Exception e) {
+	        e.printStackTrace();
+	    }
+		return 0;
+	}
+	
+	private Document saveDocument(String originalFileName, String folderName, Integer amountSplit, MultipartFile file) {
 		Document document = new Document();
 		document.setDocumentName(originalFileName);
 		document.setCreationDate(new Date());
+		document.setAmountSplit(amountSplit);
+		document.setDocumentFolderName(folderName);
 		document.setDocumentFormat(file.getContentType());
 		document.setProcessStatus(ProcessStatus.LOADED);
 		return documentRepository.save(document);
@@ -73,8 +102,13 @@ public class DocumentService {
 		Optional<Document> optional = documentRepository.findByDocumentId(documentId);
 		if(optional.isPresent() && optional.get().getProcessStatus()==ProcessStatus.LOADED) {
 			document = optional.get();
-			processDocument.launchProcessDocument(document);
+			for(int a = 0; a < document.getAmountSplit(); a++ ) {
+				DecimalFormat df = new DecimalFormat("#00");
+				processDocument.launchProcessDocument(document,df.format(a),(document.getAmountSplit()-1)==a?true:false);
+			}
 		}
+		document.setProcessStatus(ProcessStatus.PROCESSING);
+		document = documentRepository.save(document);
 		return IDocumentMapper.INSTANCE.entityToDTO(document);
 	}
 }

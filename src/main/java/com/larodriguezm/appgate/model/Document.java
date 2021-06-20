@@ -29,8 +29,12 @@ public class Document {
 	private Integer documentId;
 		
 	private String documentName;
+	
+	private String documentFolderName;
 		
     private String documentFormat;
+    
+    private Integer amountSplit;
         
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date creationDate;
