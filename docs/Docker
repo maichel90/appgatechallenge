@@ -1,0 +1,9 @@
+export JAVA_HOME=/usr/lib/jvm/java-11
+
+mvn clean install 
+
+docker build --tag lamaichel/appgatechallenge .
+
+docker rm -f appgate_challenge
+
+docker run --name appgate_challenge -p 8080:8080 -d lamaichel/appgatechallenge

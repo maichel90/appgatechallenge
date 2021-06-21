@@ -1,0 +1,105 @@
+{
+	"info": {
+		"_postman_id": "bd37aadd-e3f5-4ca4-8f1d-49c2438c27b8",
+		"name": "AppGate Challenge",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "UploadDocument",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "file",
+							"type": "file",
+							"src": "/home/larodriguezm/Aplicaciones/AppGate/Req/ipgeo-test.csv"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8080/document",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"document"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "ProcessDocument",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/document/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"document",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getDocuments",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/document",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"document"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "SerchIpAddress",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"ipaddress\":\"1.0.1.1\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/ipaddress",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"ipaddress"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

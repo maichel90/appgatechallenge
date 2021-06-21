@@ -14,11 +14,12 @@ import lombok.experimental.FieldDefaults;
 @Getter
 @Setter
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class FileStorageException extends RuntimeException{
+public class IPAddressException extends RuntimeException{
 
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 5129272446183079036L;
 	
 	String message;
 	HttpStatus code;
 	Throwable cause;
+	
 }

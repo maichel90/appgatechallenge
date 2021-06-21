@@ -12,9 +12,9 @@ spring:
       name: appgate-challenge
   datasource:
         driver-class-name: com.mysql.cj.jdbc.Driver
-        url: jdbc:mysql://192.168.0.248:3306/Appgate?useSSL=false&serverTimezone=UTC&useLegacyDatetimeCode=false&allowPublicKeyRetrieval=true
-        username: finallydate
-        password: GV4r+HVNBHUxsBTc
+        url: jdbc:mysql://${MYSQL_URL:192.168.0.248:3306}/${MYSQL_DATABASE:Appgate}?useSSL=false&serverTimezone=UTC&useLegacyDatetimeCode=false&allowPublicKeyRetrieval=true
+        username: ${MYSQL_USER:finallydate}
+        password: ${MYSQL_PASSWORD:GV4r+HVNBHUxsBTc}
 
   jpa:
       show-sql: false
