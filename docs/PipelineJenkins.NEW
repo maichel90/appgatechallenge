@@ -1,0 +1,38 @@
+node {
+    stage('Preparation') {
+        git branch: 'master', credentialsId: 'Github', url: 'https://github.com/maichel90/appgatechallenge.git'
+    }
+    stage('Resolve Dependency enrich-engine-external') {
+        sh "mvn dependency:resolve"
+    }
+    stage('Build AppGate challenge') {
+       gitlabCommitStatus {
+           withSonarQubeEnv('pocappgate'){
+               sh "mvn clean package sonar:sonar"
+            }
+        }
+    }
+    stage('Results AppGate challenge') {
+       gitlabCommitStatus {
+          junit '**/target/surefire-reports/TEST-*.xml'
+          timeout(2) {
+              waitForQualityGate abortPipeline: true
+          }
+       }
+   }
+   stage('Archive') {
+       gitlabCommitStatus {
+           archiveArtifacts 'target/appgate-challenge-0.0.1-SNAPSHOT.jar'
+       }
+   }
+   stage('Docker Build') {
+        gitlabCommitStatus {
+            sh "docker build -t lamaichel/appgatechallenge ."
+        }
+   }
+   stage('Docker push') {
+       withDockerRegistry(credentialsId: 'dockerhub', url: 'https://registry.hub.docker.com') {
+            sh "docker push lamaichel/appgatechallenge:latest"
+        }
+   }
+}
