@@ -4,6 +4,8 @@
 
 AppGateChallenge es una aplicacion codificada en JAVA utilizando el framework SPRING BOOT, este se compone de un set de servicios rest los cuales proveen la funcionalidad para la carga de una archivo CSV con un formato especifico luego de cargarlo se ejecuta un procesamiento del archivo utilizando ThreadPool para optimizar el uso de memoria y paralelismo de la funcionalidad, ya cargda la base de datos existe un servicio para consultar una ip, convertirla en formato decimal y realizar una consulta para conocer a que paiz, region y ciudad pertenece. 
 
+El siguiente diagrama visualiza una arquitectura de alta disponibilidad y eficiencia basada en microservicios y encolamiento para el procesamiento de los archivos de forma paralela
+
 ![](./docs/AppGate_HA.png)
 
 ### Características
